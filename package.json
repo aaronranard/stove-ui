@@ -1,0 +1,12 @@
+{
+  "name": "stove-sensor",
+  "version": "1.0.0",
+  "description": "express app for stove top sensor",
+  "dependencies": {
+    "express": "^4.16.2",
+    "socket.io": "^1.7.4"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}

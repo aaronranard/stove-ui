@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Is the stove on?</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body{
+        width:100%;
+        height:100%;
+      }
+      body {
+        font: 18px Helvetica, Arial;
+        color: #fff;
+        text-align: center;
+       }
+      body.cool {
+        background: linear-gradient(37.69deg, #3CAFDA 0%, #3CAFDA 32.39%, #37C0C9 100%);
+      }
+      body.cooling {
+        background: linear-gradient(180deg, #F4BC26 0%, #F77062 100%);
+      }
+      body.warming {
+        background: linear-gradient(0deg, #DD3B4C 0%, #F77062 100%);
+      }
+      #switch {
+        font-size: 8rem;
+      }
+      #temperature {
+        font-size: 16rem;
+      }
+      #status {
+        font-size: 3rem;
+      }
+      .flex-container {
+          width: 100%;
+          height: 100%;
+          display: -ms-flexbox;
+          display: -webkit-flex;
+          display: flex;
+          -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+          flex-direction: column;
+          -webkit-flex-wrap: nowrap;
+          -ms-flex-wrap: nowrap;
+          flex-wrap: nowrap;
+          -webkit-justify-content: space-between;
+          -ms-flex-pack: justify;
+          justify-content: space-between;
+          -webkit-align-content: center;
+          -ms-flex-line-pack: center;
+          align-content: center;
+          -webkit-align-items: center;
+          -ms-flex-align: center;
+          align-items: center;
+      }
+      .flex-item {
+        display:flex;
+        flex-direction: column;
+        justify-content: space-around;
+      }
+      .flex-item:nth-child(1) {
+          -webkit-order: 0;
+          -ms-flex-order: 0;
+          order: 0;
+          -webkit-flex: 1 1 auto;
+          -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+          -webkit-align-self: auto;
+          -ms-flex-item-align: auto;
+          align-self: auto;
+      }
+      .flex-item:nth-child(2) {
+          -webkit-order: 0;
+          -ms-flex-order: 0;
+          order: 0;
+          -webkit-flex: 0 1 auto;
+          -ms-flex: 0 1 auto;
+          flex: 0 1 auto;
+          -webkit-align-self: auto;
+          -ms-flex-item-align: auto;
+          align-self: auto;
+      }
+
+      .flex-item:nth-child(3) {
+          -webkit-order: 0;
+          -ms-flex-order: 0;
+          order: 0;
+          -webkit-flex: 1 1 auto;
+          -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+          -webkit-align-self: auto;
+          -ms-flex-item-align: auto;
+          align-self: auto;
+      }
+    </style>
+  </head>
+  <body class="cool">
+    <div class="flex-container">
+      <div class="flex-item">
+        <div id="switch">
+          Off
+        </div>
+      </div>
+      <div class="flex-item">
+        <div id="temperature">N/A</div>
+      </div>
+      <div class="flex-item">
+        <div id="status">
+          Need more data.
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      $(function () {
+        var socket = io('http://localhost:3000');
+        socket.on('connect', function()
+        {
+            socket.on('temperature', function(msg){
+              const json = JSON.parse(msg);
+              $('#temperature').text(parseInt(json.fahrenheit));
+            });
+
+            socket.on('status', function(msg){
+              $('#status').text(msg);
+              $('body').removeClass();
+              $('body').addClass(msg);
+              switch(msg) {
+                case 'cool':
+                case 'cooling':
+                  $('#switch').text('Off');
+                  break;
+                case 'warming':
+                  $('#switch').text('On');
+                  break;
+              }
+            });
+        });
+      });
+    </script>
+  </body>
+</html>
+
+
